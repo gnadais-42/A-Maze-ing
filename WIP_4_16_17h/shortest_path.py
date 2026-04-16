@@ -16,14 +16,17 @@ def shortest_path(
 ) -> str:
     """
     Computes the shortest path between the entry and exit point.
-    It uses Breath-first search (BFS) to find the shortest path
+    It uses Breadth-first search (BFS) to find the shortest path
     For a Perfect maze, there is really just 1 option
 
     grid is the Maze's matrix
     entry and exit are tuples representing the exit and entry cell coordenates
     queue holds an ordered queue of points to 'investigate'
     visited stores all visited points
-    parent does [??????????????????????]
+    parent is a dictionary where the keys are coordinates for a cell and the values
+    are tuples containing the cell it came from and the direction it came from.
+    parent allows us to in the end reconstruct the path from exit to entry by following in reverse
+    the "child:parent" pairs in parent
     """
 
     height = len(grid)

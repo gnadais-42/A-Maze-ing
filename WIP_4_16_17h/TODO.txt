@@ -2,13 +2,16 @@
 [x] validator.py - usar class pydantic basemodel para validar a config
 [x] criar maze.txt com o maze representado em hexadecimal
 [x] INTERFACE GRAFICO com mlx
-[] Re-generate a new maze and display it.
+[x] Re-generate a new maze and display it.
 [] Show/Hide a valid shortest path from the entrance to the exit.
 [] Change maze wall colours.
 [] Optional: set specific colours to display the “42” pattern.
-[] Comentar codigo
-[] Makefile
+[x] Comentar codigo
+[x] Makefile
 [] README
+[] Generalizar funcoes de graficos
+[] Error handling no parser
+[] joguificar o labirinto
 
 Minor stuff:
 [x] Consertar o generator - as coordenadas estao ao contrario
@@ -17,5 +20,5 @@ Minor stuff:
 [] Centrar sempre o 42 - dinamicamente para tamanhos diferentes e pares/impares - TALVEZ NAO SEJA NECESSARIO
 [] Fazer error handling e meter blocks try except em (quase) tudo
 [] Check valgrind I guess
-[] requirements.txt - dependencias do programa
+[x] requirements.txt - dependencias do programa
 [] Include a .gitignore file to exclude Python artifacts.

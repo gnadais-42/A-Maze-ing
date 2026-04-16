@@ -3,9 +3,10 @@
 [] Fazer parser.py - recebe config input e gera as variaveis para criar um maze
 [] validator.py - usar class pydantic basemodel para validar a config
 [] Centrar sempre o 42 - dinamicamente para tamanhos diferentes e pares/impares
-[] Makefile
+[] Makefile . Meter a instalar o MLX
 [] README
 [] criar maze.txt com o maze representado em hexadecimal
+
 
 Minor stuff:
 [] Consertar o generator - as coordenadas estao ao contrario
