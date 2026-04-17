@@ -69,6 +69,8 @@ def config_file_test(filename: str):
 
     maze = gen.generate(perfect=configs.perfect)
     path = shortest_path(maze, entry=configs.entry, exit=configs.exit)
+    print(gen.grid_list)
+
 
     print_maze(maze, entry=configs.entry, exit=configs.exit, path=path)
     print(path)

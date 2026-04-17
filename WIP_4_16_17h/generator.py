@@ -19,9 +19,12 @@ class MazeGenerator:
         self.grid = [[0b1111 for _ in range(width)] for _ in range(height)]
         self.blocked = [[False for _ in range(width)] for _ in range(height)]
 
+        self.grid_list = []
+
     def generate(self, perfect: bool = True) -> List[List[int]]:
-    	"""This function calls the generator functions for the perfect
-    	maze and then , if needed, tweaks it to create an imperfect maze"""
+        """This function calls the generator functions for the perfect
+    	maze and then , if needed, tweaks it to create an imperfect maze
+        """
         self._place_42_center()
         self._generate_perfect()
 
@@ -46,7 +49,9 @@ class MazeGenerator:
         break the "perfectness" of the maze
         neighbors -> List of tuples containing the coordinates of a neighbor cell of the cell we're seeing
         in stack and also the direction which it came from"""
+
         self.grid = [[0b1111 for _ in range(self.width)] for _ in range(self.height)]
+        self.grid_list = [self.grid.copy()]
         visited = [[False] * self.width for _ in range(self.height)]
 
         start = self._random_unblocked_cell()
@@ -73,6 +78,7 @@ class MazeGenerator:
                 self._remove_wall(nx, ny, OPPOSITE[d])
                 visited[ny][nx] = True
                 stack.append((nx, ny))
+                self.grid_list.append([row.copy() for row in self.grid])
             else:
                 stack.pop()
 
@@ -133,7 +139,7 @@ class MazeGenerator:
         return (self.grid[y][x] & (1 << 3 - d)) != 0
 
     def _in_bounds(self, x: int, y: int) -> bool:
-    	"""checks if the given cell is within the bounds of the maze"""
+        """checks if the given cell is within the bounds of the maze"""
         return 0 <= x < self.width and 0 <= y < self.height
 
     def _random_unblocked_cell(self) -> Tuple[int, int]:

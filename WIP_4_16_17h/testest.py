@@ -42,11 +42,15 @@ entry = configs.entry
 exit = configs.exit
 
 
-def regen_maze(mlx_ptr, win_ptr, generator: Any, configs:  Any, ) -> Any:
+def regen_maze(mlx_ptr, win_ptr, generator: Any, configs:  Any) -> Any:
     """regenerates maze with new set up"""
     maze = generator.generate(perfect=configs.perfect)
+    grids = generator.grid_list
     short_path = shortest_path(maze, configs.entry, configs.exit)
     path = _path_to_cells(configs.entry, short_path)
+    for grid in grids:
+        display_maze_mlx(mlx_ptr, win_ptr, grid, None, configs)
+        sleep(0.02)
     display_maze_mlx(mlx_ptr, win_ptr, maze, path, configs)
     print_maze(maze, configs.entry, configs.exit, short_path)
     return maze
@@ -56,6 +60,8 @@ def display_maze_mlx(mlx_ptr, win_ptr, maze, path, configs):
 
     entry = configs.entry
     exit = configs.exit
+    if path is None:
+        path = []
     m.mlx_clear_window(mlx_ptr, win_ptr)
     fill_square(mlx_ptr, win_ptr, (0, 0), (configs.width * 20, configs.height * 20), 0xFFFFFFFF)
 
@@ -97,6 +103,7 @@ gen = MazeGenerator(width=configs.width, height=configs.height,
                     seed=configs.seed)
 
 maze1 = gen.generate(perfect=configs.perfect)
+grids = gen.grid_list
 path = shortest_path(maze1, entry=configs.entry, exit=configs.exit)
 
 path_cells = _path_to_cells(entry, path)
