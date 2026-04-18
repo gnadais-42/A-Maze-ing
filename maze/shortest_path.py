@@ -2,10 +2,10 @@ from collections import deque
 from typing import List, Tuple, Dict
 
 DIRS = [
-    (-1, 0, "N"),
-    (0, 1, "E"),
-    (1, 0, "S"),
-    (0, -1, "W"),
+    (0, -1, "N"),
+    (1, 0, "E"),
+    (0, 1, "S"),
+    (-1, 0, "W"),
 ]
 
 
@@ -14,6 +14,21 @@ def shortest_path(
     entry: Tuple[int, int],
     exit: Tuple[int, int],
 ) -> str:
+    """
+    Computes the shortest path between the entry and exit point.
+    It uses Breadth-first search (BFS) to find the shortest path
+    For a Perfect maze, there is really just 1 option
+
+    grid is the Maze's matrix
+    entry and exit are tuples representing the exit and entry cell coordenates
+    queue holds an ordered queue of points to 'investigate'
+    visited stores all visited points
+    parent is a dictionary where the keys are coordinates for a cell and the values
+    are tuples containing the cell it came from and the direction it came from.
+    parent allows us to in the end reconstruct the path from exit to entry by following in reverse
+    the "child:parent" pairs in parent
+    """
+
     height = len(grid)
     width = len(grid[0])
 
@@ -30,10 +45,10 @@ def shortest_path(
         for d, (dx, dy, letter) in enumerate(DIRS):
             nx, ny = x + dx, y + dy
 
-            if not (0 <= nx < height and 0 <= ny < width):
+            if not (0 <= nx < width and 0 <= ny < height):
                 continue
 
-            if grid[x][y] & (1 << d):
+            if grid[y][x] & (1 << 3 - d):
                 continue
 
             if (nx, ny) not in visited:

@@ -1,10 +1,7 @@
 from mlx import Mlx
-from generator import MazeGenerator
-from shortest_path import shortest_path
-from maze_printer import _path_to_cells
+from maze import MazeGenerator, _path_to_cells, print_maze, shortest_path
 from parser import valid_config, parser
 from typing import Tuple, Any
-from maze_printer import print_maze
 from time import sleep
 
 

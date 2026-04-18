@@ -1,10 +1,13 @@
 from typing import List, Tuple, Iterable, Set
 
-DIRS = [(-1, 0), (0, 1), (1, 0), (0, -1)]
+DIRS = [(0, -1), (1, 0), (0, 1), (-1, 0)]
 DIR_LETTER_TO_IDX = {"N": 0, "E": 1, "S": 2, "W": 3}
 
 
 def _path_to_cells(entry: Tuple[int, int], path: str) -> Set[Tuple[int, int]]:
+    """Takes a point and a path in a string format
+    (eg. WWWENS, where letters represent directions)
+    And returns all the coordinates/points along that path"""
     cells: Set[Tuple[int, int]] = set()
     r, c = entry
     cells.add((r, c))
@@ -22,6 +25,13 @@ def print_maze(
     exit: Tuple[int, int],
     path: str | None = None,
 ) -> None:
+
+    """Prints the maze using ASCII characters,
+    placing a green zero on the entry point cell,
+    a red zero on the exit point cell and blue zeros
+    on the cells composed by the shortest path between 
+    the entry point and the exit point (if it exists)"""
+
     height = len(grid)
     width = len(grid[0]) if height else 0
 
@@ -43,11 +53,11 @@ def print_maze(
         for j in range(width):
             cell = grid[i][j]
 
-            if (i, j) == entry:
+            if (j, i) == entry:
                 content = f" {green}0{reset} "
-            elif (i, j) == exit:
+            elif (j, i) == exit:
                 content = f" {red}0{reset} "
-            elif (i, j) in path_cells and cell != 0b1111:
+            elif (j, i) in path_cells and cell != 0b1111:
                 content = f" {blue}0{reset} "
             elif cell == 0b1111:
                 content = "###"
@@ -56,12 +66,12 @@ def print_maze(
 
             row_top += content
 
-            if cell & (1 << 1):
+            if cell & (1 << 2):
                 row_top += "|"
             else:
                 row_top += " "
 
-            if cell & (1 << 2):
+            if cell & (1 << 1):
                 row_bottom += "---+"
             else:
                 row_bottom += "   +"
