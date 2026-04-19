@@ -1,4 +1,4 @@
-from typing import List, Tuple, Iterable, Set
+from typing import List, Tuple, Set
 
 DIRS = [(0, -1), (1, 0), (0, 1), (-1, 0)]
 DIR_LETTER_TO_IDX = {"N": 0, "E": 1, "S": 2, "W": 3}

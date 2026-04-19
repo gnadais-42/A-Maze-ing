@@ -1,7 +1,7 @@
 import random
 from typing import List, Tuple
 
-# Directions: N, E, S, W
+
 DIRS = [(0, -1), (1, 0), (0, 1), (-1, 0)]
 OPPOSITE = {0: 2, 1: 3, 2: 0, 3: 1}
 
