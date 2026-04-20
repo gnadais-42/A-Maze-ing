@@ -1,4 +1,5 @@
 from typing import List, Tuple, Set
+from .player import Player
 
 DIRS = [(0, -1), (1, 0), (0, 1), (-1, 0)]
 DIR_LETTER_TO_IDX = {"N": 0, "E": 1, "S": 2, "W": 3}
@@ -24,6 +25,7 @@ def print_maze(
     entry: Tuple[int, int],
     exit: Tuple[int, int],
     path: str | None = None,
+    player: Player | None = None
 ) -> None:
 
     """Prints the maze using ASCII characters,
@@ -38,11 +40,15 @@ def print_maze(
     green = "\033[92m"
     red = "\033[91m"
     blue = "\033[94m"
+    yellow = "\033[93m"
     reset = "\033[0m"
 
     path_cells: Set[Tuple[int, int]] = set()
     if path:
         path_cells = _path_to_cells(entry, path)
+    player_coords = (-1, -1)
+    if player is not None:
+        player_coords = player.coords
 
     print("+" + "---+" * width)
 
@@ -63,6 +69,8 @@ def print_maze(
                 content = "###"
             else:
                 content = "   "
+            if (j, i) == player_coords:
+                content = f" {red if player.wrong_turn else yellow}P{reset} "
 
             row_top += content
 

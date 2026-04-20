@@ -1,4 +1,4 @@
-from generator import MazeGenerator
+from .generator import MazeGenerator
 from typing import List, Tuple
 
 
@@ -17,13 +17,24 @@ class Player:
         self.coords = coords
         self.path = ""
         self.path_cells = set()
+        self.wrong_turn = False
 
-    def move(self, d: int) -> None:
+    def move(self, d: int | None) -> None:
+        if d is None:
+            return
+        
         nx = self.coords[0] + DIRS[d][0]
         ny = self.coords[1] + DIRS[d][1]
 
-        if (self.maze._has_wall(self.coords[0], self.coords[1], d)
+        print(nx, ny)
+
+        if (not self.maze._has_wall(self.coords[0], self.coords[1], d)
             and self.maze._in_bounds(nx, ny)):
             self.coords = (nx, ny)
-            self.path += DIRS[d]
+            self.path += DIRS[d][2]
             self.path_cells.add(self.coords)
+        else:
+            self.wrong_turn = True
+    
+    def correct_turn(self):
+        self.wrong_turn = False
