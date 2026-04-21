@@ -1,10 +1,7 @@
 from mlx import Mlx
-from generator import MazeGenerator
-from shortest_path import shortest_path
-from maze_printer import _path_to_cells
-from parser import valid_config, parser, MazeConfiguration
+from maze import MazeGenerator, MazeConfiguration, shortest_path, path_to_cells, print_maze
+from parser import parser
 from typing import Tuple, Any
-from maze_printer import print_maze
 from collections import deque
 
 
@@ -121,7 +118,7 @@ def regen_maze(dsp: MazeDisplay, generator: MazeGenerator, configs:  Any):
     """regenerates maze with new set up"""
     dsp.maze = generator.generate(perfect=configs.perfect)
     short_path = shortest_path(dsp.maze, configs.entry, configs.exit)
-    dsp.path = _path_to_cells(configs.entry, short_path)
+    dsp.path = path_to_cells(configs.entry, short_path)
     dsp.path_shown = False
     display_maze(dsp, dsp.configs)
     print_maze(dsp.maze, configs.entry,
@@ -226,7 +223,7 @@ def display_maze(dsp: MazeDisplay,
                                     dsp.img.img, 0, 0)
 
 
-configs = valid_config(parser("config_test.txt"))
+configs = parser("config.txt")
 entry = configs.entry
 exit = configs.exit
 dsp = display_init(configs)
@@ -238,7 +235,7 @@ gen = MazeGenerator(width=configs.width, height=configs.height,
 dsp.maze = gen.generate(perfect=configs.perfect)
 path = shortest_path(dsp.maze, entry=configs.entry, exit=configs.exit)
 
-dsp.path = _path_to_cells(entry, path)
+dsp.path = path_to_cells(entry, path)
 
 
 stuff = [1, 2]

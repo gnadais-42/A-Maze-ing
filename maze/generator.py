@@ -20,6 +20,7 @@ class MazeGenerator:
         self.blocked = [[False for _ in range(width)] for _ in range(height)]
 
         self.grid_list = []
+        self.cells_generated = []
 
     def generate(self, perfect: bool = True) -> List[List[int]]:
         """This function calls the generator functions for the perfect
@@ -57,6 +58,7 @@ class MazeGenerator:
         start = self._random_unblocked_cell()
         stack = [start]
         visited[start[1]][start[0]] = True
+        self.cells_generated = [start]
 
         while stack:
             x, y = stack[-1]
@@ -79,8 +81,10 @@ class MazeGenerator:
                 visited[ny][nx] = True
                 stack.append((nx, ny))
                 self.grid_list.append([row.copy() for row in self.grid])
+                self.cells_generated.append((nx, ny))
             else:
                 stack.pop()
+
 
     def _add_cycles(self, attempts: int | None = None) -> None:
         """Adds cycles in order to generate a false (non-perfect) Maze
@@ -109,7 +113,6 @@ class MazeGenerator:
         """Places a 42 pattern at the center of the Maze, if the size allows it"""
 
         if self.height < 7 or self.width < 8:
-            print("Error: Maze size too small for 42 pattern")
             return
 
         pattern = [
@@ -122,7 +125,7 @@ class MazeGenerator:
 
         start_x = (self.width - 6) // 2
         start_y = (self.height - 5) // 2
-        print(f"{start_x, start_y}")
+
         for i in range(6):
             for j in range(5):
                 if pattern[j][i] == 1:

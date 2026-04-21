@@ -1,5 +1,6 @@
-from maze import MazeGenerator, parser, MazeConfiguration, print_maze, shortest_path, path_to_cells
+from maze import MazeGenerator, MazeConfiguration, print_maze, shortest_path, path_to_cells
 from time import sleep
+from parser import parser
 import sys
 
 def main() -> None:
@@ -19,8 +20,15 @@ def main() -> None:
 
     generator.generate(config.perfect)
     maze = generator.grid
+    print(len(generator.cells_generated))
+
+    print_maze(maze, config.entry, config.exit, shortest_path(maze, config.entry, config.exit))
 
     #pseudocodigo:
     # Criar a MazeDisplay  classe
     # Abrir a janela com a funcao que imprime o labirinto e 
     # deteta botoes de teclado para mudar cenas no labirinto
+
+
+if __name__ == "__main__":
+    main()
