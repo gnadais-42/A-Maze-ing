@@ -1,7 +1,8 @@
 from dotenv import load_dotenv
 import os
 from pydantic import BaseModel, model_validator, ValidationError, Field
-from typing import Dict, Optional
+from typing import Optional
+from maze import MazeGenerator, print_maze
 
 class MazeConfiguration(BaseModel):
     """class for validating Maze config"""
@@ -32,48 +33,53 @@ class MazeConfiguration(BaseModel):
         return data
 
     @model_validator(mode="after")
-    def valid_chk(self):
+    def valid_coords(self):
         if not ((0 <= self.entry[0] < self.width)
                 and (0 <= self.entry[1] < self.height)):
             raise ValueError("Entry point must be inside maze")
-
+        
         if not ((0 <= self.exit[0] < self.width)
                 and (0 <= self.exit[1] < self.height)):
             raise ValueError("Exit point must be inside maze")
+        
+        return self
+    
+    def is_inside_42(self, x: int, y: int) -> bool:
+        if self.height < 6 or self.width < 7:
+            return False
 
+        pattern = [
+            [1, 0, 1, 0, 1, 1],
+            [1, 0, 1, 0, 0, 1],
+            [1, 1, 1, 0, 1, 1],
+            [0, 0, 1, 0, 1, 0],
+            [0, 0, 1, 0, 1, 1],
+        ]
+
+        start_row = (self.height - 5) // 2
+        start_col = (self.width - 6) // 2
+
+        local_r = y - start_row
+        local_c = x - start_col
+
+        if 0 <= local_r < 5 and 0 <= local_c < 6:
+            return pattern[local_r][local_c] == 1
+
+        return False
+
+    @model_validator(mode="after")
+    def valid_entry_exit(self):
         if self.entry == self.exit:
             raise ValueError("Exit and Entry points must be different")
-
-        if self.height > 6 or self.width > 7:
-            pattern = [
-                [1, 0, 1, 0, 1, 1],
-                [1, 0, 1, 0, 0, 1],
-                [1, 1, 1, 0, 1, 1],
-                [0, 0, 1, 0, 1, 0],
-                [0, 0, 1, 0, 1, 1],
-            ]
-
-            start_x = (self.width - 6) // 2
-            start_y = (self.height - 5) // 2
-
-            if (
-                6 > self.exit[0] - start_x >= 0 and
-                5 > self.exit[1] - start_y >= 0
-            ):
-
-                if pattern[self.exit[1] - start_y][self.exit[0] - start_x]:
-                    raise ValueError("Exit point must not "
-                                     "fall inside 42 pattern")
-
-            if (
-                6 > self.entry[0] - start_x >= 0 and
-                5 > self.entry[1] - start_y >= 0
-            ):
-                if pattern[self.entry[1] - start_y][self.entry[0] - start_x]:
-                    raise ValueError("Entry point must not "
-                                     "fall inside 42 pattern")
-
+        
+        if self.is_inside_42(*self.entry):
+            raise ValueError("Entry point must not fall inside 42 pattern")
+        
+        if self.is_inside_42(*self.exit):
+            raise ValueError("Exit point must not fall inside 42 pattern")
+        
         return self
+
 
 def parser(config_file: str) -> Optional[MazeConfiguration]:
     """Function that reads the config file and turns it into variables
@@ -111,15 +117,25 @@ def print_config(config: MazeConfiguration) -> None:
 
 if __name__ == "__main__":
     config = parser("config_test.txt")
-    print(
-        os.getenv("WIDTH"),
-        os.getenv("HEIGHT"),
-        os.getenv("ENTRY"),
-        os.getenv("EXIT"),
-        os.getenv("OUTPUT_FILE"),
-        os.getenv("PERFECT"),
-        os.getenv("ALGORITHM"),
-        os.getenv("SEED"),
-        os.getenv("DISPLAY_MODE")
-    )
-    print_config(config)
+    # print(
+    #     os.getenv("WIDTH"),
+    #     os.getenv("HEIGHT"),
+    #     os.getenv("ENTRY"),
+    #     os.getenv("EXIT"),
+    #     os.getenv("OUTPUT_FILE"),
+    #     os.getenv("PERFECT"),
+    #     os.getenv("ALGORITHM"),
+    #     os.getenv("SEED"),
+    #     os.getenv("DISPLAY_MODE")
+    # )
+    if config is not None:
+        gen = MazeGenerator(
+            config.width,
+            config.height,
+            config.entry,
+            config.exit,
+            config.seed,
+        )
+        gen.generate(config.perfect)
+        print_maze(gen.grid, gen.entry, gen.exit, None, None)
+        print_config(config)

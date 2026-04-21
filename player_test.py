@@ -8,7 +8,7 @@ DIR_LETTER_TO_IDX = {"N": 0, "E": 1, "S": 2, "W": 3}
 def test():
     entry = (0,0)
     exit = (10,10)
-    gen = MazeGenerator(15, 15, entry, exit)
+    gen = MazeGenerator(10, 10, entry, exit)
     gen.generate(True)
 
     maze = gen.grid
