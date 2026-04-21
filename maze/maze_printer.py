@@ -5,7 +5,7 @@ DIRS = [(0, -1), (1, 0), (0, 1), (-1, 0)]
 DIR_LETTER_TO_IDX = {"N": 0, "E": 1, "S": 2, "W": 3}
 
 
-def _path_to_cells(entry: Tuple[int, int], path: str) -> Set[Tuple[int, int]]:
+def path_to_cells(entry: Tuple[int, int], path: str) -> Set[Tuple[int, int]]:
     """Takes a point and a path in a string format
     (eg. WWWENS, where letters represent directions)
     And returns all the coordinates/points along that path"""
@@ -45,7 +45,7 @@ def print_maze(
 
     path_cells: Set[Tuple[int, int]] = set()
     if path:
-        path_cells = _path_to_cells(entry, path)
+        path_cells = path_to_cells(entry, path)
     player_coords = (-1, -1)
     if player is not None:
         player_coords = player.coords
