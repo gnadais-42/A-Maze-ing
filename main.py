@@ -1,6 +1,6 @@
-from maze import MazeGenerator, MazeConfiguration, print_maze, shortest_path, path_to_cells
-from time import sleep
+from maze import MazeGenerator, MazeConfiguration, print_maze, shortest_path
 from parser import parser
+from MazeDisplay import MazeDisplay
 import sys
 
 def main() -> None:
@@ -23,6 +23,9 @@ def main() -> None:
     print(len(generator.cells_generated))
 
     print_maze(maze, config.entry, config.exit, shortest_path(maze, config.entry, config.exit))
+
+    dsp = MazeDisplay(config)
+    dsp.start_display()
 
     #pseudocodigo:
     # Criar a MazeDisplay  classe
