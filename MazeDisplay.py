@@ -332,6 +332,8 @@ class MazeDisplay:
                                 0xFFFFFFFF, "C - Change Colorset")
         self.mlx.mlx_string_put(self.mlx_ptr, self.win_ptr2, 4, 80,
                                 0xFFFFFFFF, "H - Change Horse")
+        self.mlx.mlx_string_put(self.mlx_ptr, self.win_ptr2, 4, 105,
+                                0xFFFFFFFF, "S - Skip Animation")
         self.mlx.mlx_string_put(self.mlx_ptr, self.win_ptr2, 15, 170,
                                 0xFFFFFFFF, "Esc - End Program")
 
