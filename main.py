@@ -3,12 +3,13 @@ from parser import parser
 from MazeDisplay import MazeDisplay
 import sys
 
+
 def main() -> None:
     config: MazeConfiguration = parser("config.txt")
 
     if config is None:
         print("=== Invalid configuration input ===")
-        return # ou sera melhor sys.exit(1)?
+        return  # ou sera melhor sys.exit(1)?
 
     generator: MazeGenerator = MazeGenerator(
         config.width,
@@ -22,14 +23,15 @@ def main() -> None:
     maze = generator.grid
     print(len(generator.cells_generated))
 
-    print_maze(maze, config.entry, config.exit, shortest_path(maze, config.entry, config.exit))
+    print_maze(maze, config.entry, config.exit,
+               shortest_path(maze, config.entry, config.exit))
 
     dsp = MazeDisplay(config)
     dsp.start_display()
 
-    #pseudocodigo:
+    # pseudocodigo:
     # Criar a MazeDisplay  classe
-    # Abrir a janela com a funcao que imprime o labirinto e 
+    # Abrir a janela com a funcao que imprime o labirinto e
     # deteta botoes de teclado para mudar cenas no labirinto
 
 

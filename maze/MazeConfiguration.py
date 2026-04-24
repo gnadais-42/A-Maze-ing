@@ -35,13 +35,13 @@ class MazeConfiguration(BaseModel):
         if not ((0 <= self.entry[0] < self.width)
                 and (0 <= self.entry[1] < self.height)):
             raise ValueError("Entry point must be inside maze")
-        
+
         if not ((0 <= self.exit[0] < self.width)
                 and (0 <= self.exit[1] < self.height)):
             raise ValueError("Exit point must be inside maze")
-        
+
         return self
-    
+
     def is_inside_42(self, x: int, y: int) -> bool:
         if self.height < 6 or self.width < 7:
             return False
@@ -69,11 +69,11 @@ class MazeConfiguration(BaseModel):
     def valid_entry_exit(self):
         if self.entry == self.exit:
             raise ValueError("Exit and Entry points must be different")
-        
+
         if self.is_inside_42(*self.entry):
             raise ValueError("Entry point must not fall inside 42 pattern")
-        
+
         if self.is_inside_42(*self.exit):
             raise ValueError("Exit point must not fall inside 42 pattern")
-        
+
         return self

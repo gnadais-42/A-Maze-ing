@@ -12,7 +12,9 @@ DIR_LETTER_TO_IDX = {"N": 0, "E": 1, "S": 2, "W": 3}
 
 
 class Player:
-    def __init__(self, generator: MazeGenerator, coords: Tuple[int, int] | None = None) -> None:
+    def __init__(self, generator: MazeGenerator,
+                 coords: Tuple[int, int] | None = None) -> None:
+
         self.start = coords
         self.maze = generator
         self.coords = coords
@@ -31,16 +33,17 @@ class Player:
         print(nx, ny)
 
         if (not self.maze._has_wall(self.coords[0], self.coords[1], d)
-            and self.maze._in_bounds(nx, ny)):
+                and self.maze._in_bounds(nx, ny)):
+
             self.coords = (nx, ny)
             self.path += DIRS[d][2]
             self.path_cells.add(self.coords)
         else:
             self.wrong_turn = True
-        
+
         if self.coords == self.maze.exit:
             self.lock = True
-    
+
     def correct_turn(self):
         self.wrong_turn = False
 
@@ -50,4 +53,3 @@ class Player:
         self.wrong_turn = False
         self.coords = self.start
         self.lock = False
-

@@ -31,7 +31,7 @@ def print_maze(
     """Prints the maze using ASCII characters,
     placing a green zero on the entry point cell,
     a red zero on the exit point cell and blue zeros
-    on the cells composed by the shortest path between 
+    on the cells composed by the shortest path between
     the entry point and the exit point (if it exists)"""
 
     height = len(grid)

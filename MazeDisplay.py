@@ -1,5 +1,6 @@
 from mlx import Mlx
-from maze import MazeGenerator, MazeConfiguration, Player, shortest_path, path_to_cells, print_maze
+from maze import MazeGenerator, MazeConfiguration, Player, shortest_path
+from maze import path_to_cells
 from parser import parser
 from typing import Tuple, Any
 from collections import deque
@@ -19,7 +20,13 @@ class ImgData:
 
 
 class MazeDisplay:
-    """Structure for main vars"""
+    """Structure for displaying the Maze graphically. Uses minilibx.
+    Everything from the initial maze gen to opening the windows and calculating
+    the shortest path, or getting screen dimensions is done at initialization.
+    All it needs are valid configs for the maze.
+
+    The size of the second window, colorsets and most other static variables
+    are attributes of this class."""
     def __init__(self, configs: MazeConfiguration) -> None:
         self.configs = configs
         self.generator = MazeGenerator(width=configs.width,
@@ -67,6 +74,7 @@ class MazeDisplay:
         self.anim_step = 0
 
     def _generate_horses(self) -> deque:
+        """Generates the images of the horse sprites from asset pngs"""
         horses_img = deque()
         horses_png = [
             "sprites/horse-1.png",
@@ -76,26 +84,31 @@ class MazeDisplay:
             "sprites/horse-5.png"
         ]
         for sprite in horses_png:
-            horse , _, __ = self.mlx.mlx_png_file_to_image(self.mlx_ptr, sprite)
+            horse, _, __ = self.mlx.mlx_png_file_to_image(self.mlx_ptr, sprite)
             horses_img.append(horse)
-        
+
         return horses_img
 
     def shuffle_horses(self) -> None:
+        """Shuffles/rotates through the available horse sprites"""
         self.horses.rotate(-1)
 
     def shuffle_colors(self) -> None:
+        """Shuffles/rotates through the available colorsets"""
         self.colorsets.rotate(-1)
 
     def mykey(self, keynum, stuff: Any) -> None:
+        """Detects various keyboard inputs
+        and calls the relevant programs for each input"""
         _ = stuff
-        #print(f"Got key {keynum}")
+        #  print(f"Got key {keynum}")
         if keynum == 103:
             self.mlx.mlx_clear_window(self.mlx_ptr, self.win_ptr1)
             self.fill_square(self.img_ptr,
-                         (0, 0),
-                         (self.configs.width * 20, self.configs.height * 20),
-                          self.colorsets[0][0])
+                             (0, 0),
+                             (self.configs.width * 20,
+                              self.configs.height * 20),
+                             self.colorsets[0][0])
             self.regen_maze()
             self.anim_step = 0
         if keynum == 104:
@@ -124,8 +137,9 @@ class MazeDisplay:
             self.player.move(2)
             self.display_maze()
 
-
     def toggle_path(self) -> None:
+        """Toggles wether the shortest path is visible or not
+        by painting over it"""
         #  print(self.path_shown)
         if self.path_shown:
             new_color = self.colorsets[0][1]
@@ -157,37 +171,50 @@ class MazeDisplay:
                 if cell & 1:  # check W wall
                     self.fill_square(self.img_ptr, (real_x, real_y),
                                      (real_x + 3, real_y + 20), wall_color)
+
         self.mlx.mlx_put_image_to_window(self.mlx_ptr, self.win_ptr1,
                                          self.img_ptr.img, 0, 0)
+
         self.mlx.mlx_put_image_to_window(self.mlx_ptr, self.win_ptr1,
-                                         self.horses[0], self.player.coords[0] * 20, self.player.coords[1] * 20)
+                                         self.horses[0],
+                                         self.player.coords[0] * 20,
+                                         self.player.coords[1] * 20)
+
         self.mlx.mlx_put_image_to_window(self.mlx_ptr, self.win_ptr1,
-                                         self.carrot, self.configs.exit[0] * 20, self.configs.exit[1] * 20)
+                                         self.carrot,
+                                         self.configs.exit[0] * 20,
+                                         self.configs.exit[1] * 20)
         self.path_shown = not self.path_shown
 
     def gere_close(self, stuff: Any) -> None:
+        """Closes the display loop"""
         _ = stuff
         self.mlx.mlx_loop_exit(self.mlx_ptr)
         print("loop exited")
 
     def gere_close2(self, stuff: Any) -> None:
+        """Coses the second window"""
         _ = stuff
         self.mlx.mlx_destroy_window(self.mlx_ptr, self.win_ptr2)
         print("window2 destroyed")
 
     def regen_maze(self) -> None:
-        """regenerates maze with new set up"""
+        """Generates new maze from the same config
+        Also calculates the new shortest paths and resets the game"""
         self.maze = self.generator.generate(perfect=self.configs.perfect)
         short_path = shortest_path(self.maze,
                                    self.configs.entry, self.configs.exit)
         self.path = path_to_cells(self.configs.entry, short_path)
         self.path_shown = False
         self.player.reset()
-        #print_maze(self.maze, self.configs.entry,
-        #           self.configs.exit, short_path)  # delete later
+        #  print_maze(self.maze, self.configs.entry,
+        #             self.configs.exit, short_path)  # delete later
 
     def fill_square(self, img: ImgData, start: Tuple[int, int],
                     end: Tuple[int, int], color: int) -> None:
+        """Changes the color values of pixels in a square,
+         directly in the image buffer.
+         It's the only tool used to draw the maze backgrounds and walls"""
 
         st_x, st_y = start
         fn_x, fn_y = end
@@ -200,6 +227,13 @@ class MazeDisplay:
                 img.data[offset:offset + bpp] = color.to_bytes(4, 'little')
 
     def animated_generation(self, stuff: Any) -> None:
+        """Animates the backtracking algorithm that generates the maze.
+        It works from inside the loop, running at every frame/asap.
+        Tracks its own progress with the anim_step attribute
+        Has an artificial delay."""
+
+        # IDEIA - mudar o delay na animacao conforme o tamanho do maze
+
         if self.anim_step == len(self.generator.cells_generated):
             self.display_maze()
             self.anim_step += 1
@@ -209,7 +243,6 @@ class MazeDisplay:
 
         _ = stuff
         wall_color, back_color, path_color = self.colorsets[0]
-
 
         cell = self.generator.cells_generated[self.anim_step]
         x, y = cell
@@ -243,13 +276,16 @@ class MazeDisplay:
                              (x_pixel + 3, y_pixel + 20),
                              wall_color)
 
-        #self.mlx.mlx_clear_window(self.mlx_ptr, self.win_ptr1)
+        #  self.mlx.mlx_clear_window(self.mlx_ptr, self.win_ptr1)
 
         self.anim_step += 1
         self.mlx.mlx_put_image_to_window(self.mlx_ptr, self.win_ptr1,
                                          self.img_ptr.img, 0, 0)
 
     def display_maze(self) -> None:
+        """Displays the completed maze.
+        Goes through the generated maze
+        and paints the cells according to the generated wall set up."""
 
         wall_color, back_color, path_color = self.colorsets[0]
         entry = self.configs.entry
@@ -309,16 +345,26 @@ class MazeDisplay:
         self.mlx.mlx_put_image_to_window(self.mlx_ptr, self.win_ptr1,
                                          self.img_ptr.img, 0, 0)
         self.mlx.mlx_put_image_to_window(self.mlx_ptr, self.win_ptr1,
-                                         self.horses[0], self.player.coords[0] * 20, self.player.coords[1] * 20)
+                                         self.horses[0],
+                                         self.player.coords[0] * 20,
+                                         self.player.coords[1] * 20)
         self.mlx.mlx_put_image_to_window(self.mlx_ptr, self.win_ptr1,
-                                         self.carrot, exit[0] * 20, exit[1] * 20)
-        
+                                         self.carrot,
+                                         exit[0] * 20, exit[1] * 20)
 
     def start_display(self) -> None:
+        """Initializes the graphical display.
+        Responsible for introducing the instruction strings,
+        the exit/entry sprites, and setting up all the hooks
+        That mlx uses to capture user inputs"""
+
         stuff = [1, 2]
 
         self.horses = self._generate_horses()
-        self.carrot, _, __ = self.mlx.mlx_png_file_to_image(self.mlx_ptr, "sprites/carrot.png")
+
+        self.carrot, _, __ = \
+            self.mlx.mlx_png_file_to_image(self.mlx_ptr,
+                                           "sprites/carrot.png")
 
         self.mlx.mlx_hook(self.win_ptr1, 33, 0, self.gere_close, stuff)
         self.mlx.mlx_hook(self.win_ptr2, 33, 0, self.gere_close2, stuff)
@@ -341,7 +387,7 @@ class MazeDisplay:
         self.fill_square(self.img_ptr,
                          (0, 0),
                          (self.configs.width * 20, self.configs.height * 20),
-                          wall_color)
+                         wall_color)
         self.mlx.mlx_loop_hook(self.mlx_ptr, self.animated_generation, None)
         self.mlx.mlx_loop(self.mlx_ptr)
         self.mlx.mlx_destroy_image(self.mlx_ptr, self.img_ptr.img)

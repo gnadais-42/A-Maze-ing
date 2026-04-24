@@ -4,6 +4,7 @@ from typing import Optional
 from maze import MazeGenerator, MazeConfiguration, print_maze
 from pydantic import ValidationError
 
+
 def parser(config_file: str) -> Optional[MazeConfiguration]:
     """Function that reads the config file and turns it into variables
     usable by the maze generator"""
@@ -35,6 +36,7 @@ def parser(config_file: str) -> Optional[MazeConfiguration]:
 def print_config(config: MazeConfiguration) -> None:
     for name, value in config:
         print(f"{name}: {value}")
+
 
 if __name__ == "__main__":
     config = parser("config_test.txt")
