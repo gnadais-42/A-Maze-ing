@@ -309,7 +309,7 @@ class MazeDisplay:
                 cell = self.maze[y][x]
 
                 if (self.path_shown and (x, y) in self.path
-                      and cell != 0b1111):
+                      and cell != 0b1111 and (x, y) not in (entry, exit)):
                     self.fill_square(self.img_ptr, (real_x, real_y),
                                      (real_x + 20, real_y + 20), path_color)
 
