@@ -175,6 +175,11 @@ class MazeDisplay:
 
         self.mlx.mlx_put_image_to_window(self.mlx_ptr, self.win_ptr1,
                                          self.img_ptr.img, 0, 0)
+        
+        self.mlx.mlx_put_image_to_window(self.mlx_ptr, self.win_ptr1,
+                                         self.stable,
+                                         self.configs.entry[0] * 20,
+                                         self.configs.entry[1] * 20)
 
         self.mlx.mlx_put_image_to_window(self.mlx_ptr, self.win_ptr1,
                                          self.horses[0],
