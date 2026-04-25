@@ -70,6 +70,7 @@ class MazeDisplay:
                                [0xFF238F18, 0xFFCBFF30, 0xFF00E5FF]])
         self.horses = deque()
         self.carrot = None
+        self.stable = None
 
         self.anim_step = 0
 
@@ -138,7 +139,7 @@ class MazeDisplay:
             self.display_maze()
 
     def toggle_path(self) -> None:
-        """Toggles wether the shortest path is visible or not
+        """Toggles whether the shortest path is visible or not
         by painting over it"""
         #  print(self.path_shown)
         if self.path_shown:
@@ -302,15 +303,7 @@ class MazeDisplay:
                 real_x = x*20
                 cell = self.maze[y][x]
 
-                if (x, y) == entry:
-                    self.fill_square(self.img_ptr, (real_x, real_y),
-                                     (real_x + 20, real_y + 20), 0xFF00FF00)
-
-                elif (x, y) == exit:
-                    self.fill_square(self.img_ptr, (real_x, real_y),
-                                     (real_x + 20, real_y + 20), 0xFFFF0000)
-
-                elif (self.path_shown and (x, y) in self.path
+                if (self.path_shown and (x, y) in self.path
                       and cell != 0b1111):
                     self.fill_square(self.img_ptr, (real_x, real_y),
                                      (real_x + 20, real_y + 20), path_color)
@@ -345,6 +338,9 @@ class MazeDisplay:
         self.mlx.mlx_put_image_to_window(self.mlx_ptr, self.win_ptr1,
                                          self.img_ptr.img, 0, 0)
         self.mlx.mlx_put_image_to_window(self.mlx_ptr, self.win_ptr1,
+                                         self.stable,
+                                         entry[0] * 20, entry[1] * 20)
+        self.mlx.mlx_put_image_to_window(self.mlx_ptr, self.win_ptr1,
                                          self.horses[0],
                                          self.player.coords[0] * 20,
                                          self.player.coords[1] * 20)
@@ -361,6 +357,10 @@ class MazeDisplay:
         stuff = [1, 2]
 
         self.horses = self._generate_horses()
+
+        self.stable, _, __ = \
+            self.mlx.mlx_png_file_to_image(self.mlx_ptr,
+                                           "sprites/stable.png")
 
         self.carrot, _, __ = \
             self.mlx.mlx_png_file_to_image(self.mlx_ptr,
