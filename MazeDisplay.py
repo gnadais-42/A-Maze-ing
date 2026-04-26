@@ -157,19 +157,19 @@ class MazeDisplay:
                 cell = self.maze[y][x]
                 self.fill_square(self.img_ptr, (real_x, real_y),
                                  (real_x + 20, real_y + 20), new_color)
-                if cell & (1 << 3):  # check N wall
+                if cell & 1:  # check N wall
                     self.fill_square(self.img_ptr, (real_x, real_y),
                                      (real_x + 20, real_y + 3), wall_color)
 
-                if cell & (1 << 2):  # check E wall
+                if cell & (1 << 1):  # check E wall
                     self.fill_square(self.img_ptr, (real_x + 17, real_y),
                                      (real_x + 20, real_y + 20), wall_color)
 
-                if cell & (1 << 1):  # check S wall
+                if cell & (1 << 2):  # check S wall
                     self.fill_square(self.img_ptr, (real_x, real_y + 17),
                                      (real_x + 20, real_y + 20), wall_color)
 
-                if cell & 1:  # check W wall
+                if cell & (1 << 3):  # check W wall
                     self.fill_square(self.img_ptr, (real_x, real_y),
                                      (real_x + 3, real_y + 20), wall_color)
 
@@ -262,22 +262,22 @@ class MazeDisplay:
 
         grid_value = self.maze[y][x]
 
-        if grid_value & (1 << 3):  # check N wall
+        if grid_value & 1:  # check N wall
             self.fill_square(self.img_ptr, (x_pixel, y_pixel),
                              (x_pixel + 20, y_pixel + 3),
                              wall_color)
 
-        if grid_value & (1 << 2):  # check E wall
+        if grid_value & (1 << 1):  # check E wall
             self.fill_square(self.img_ptr, (x_pixel + 17, y_pixel),
                              (x_pixel + 20, y_pixel + 20),
                              wall_color)
 
-        if grid_value & (1 << 1):  # check S wall
+        if grid_value & (1 << 2):  # check S wall
             self.fill_square(self.img_ptr, (x_pixel, y_pixel + 17),
                              (x_pixel + 20, y_pixel + 20),
                              wall_color)
 
-        if grid_value & 1:  # check W wall
+        if grid_value & (1 << 3):  # check W wall
             self.fill_square(self.img_ptr, (x_pixel, y_pixel),
                              (x_pixel + 3, y_pixel + 20),
                              wall_color)
@@ -319,22 +319,22 @@ class MazeDisplay:
 
                 else:
 
-                    if cell & (1 << 3):  # check N wall
+                    if cell & 1:  # check N wall
                         self.fill_square(self.img_ptr, (real_x, real_y),
                                          (real_x + 20, real_y + 3),
                                          wall_color)
 
-                    if cell & (1 << 2):  # check E wall
+                    if cell & (1 << 1):  # check E wall
                         self.fill_square(self.img_ptr, (real_x + 17, real_y),
                                          (real_x + 20, real_y + 20),
                                          wall_color)
 
-                    if cell & (1 << 1):  # check S wall
+                    if cell & (1 << 2):  # check S wall
                         self.fill_square(self.img_ptr, (real_x, real_y + 17),
                                          (real_x + 20, real_y + 20),
                                          wall_color)
 
-                    if cell & 1:  # check W wall
+                    if cell & (1 << 3):  # check W wall
                         self.fill_square(self.img_ptr, (real_x, real_y),
                                          (real_x + 3, real_y + 20),
                                          wall_color)
