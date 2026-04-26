@@ -146,11 +146,11 @@ class MazeGenerator:
 
     def _remove_wall(self, x: int, y: int, d: int) -> None:
         """removes a cell's wall in a given direction"""
-        self.grid[y][x] &= ~(1 << 3 - d)
+        self.grid[y][x] &= ~(1 << d)
 
     def _has_wall(self, x: int, y: int, d: int) -> bool:
         """checks that the cell has a wall in a given direction"""
-        return (self.grid[y][x] & (1 << 3 - d)) != 0
+        return (self.grid[y][x] & (1 << d)) != 0
 
     def _in_bounds(self, x: int, y: int) -> bool:
         """checks if the given cell is within the bounds of the maze"""

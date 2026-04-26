@@ -23,6 +23,16 @@ def main() -> None:
     maze = generator.grid
     print(len(generator.cells_generated))
 
+    with open(config.output_file, "w") as f:
+        for row in maze:
+            line = ''.join(format(x, 'X') for x in row)
+            f.write(line + '\n')
+        f.write("\n")
+        f.write(f"{config.entry[0]},{config.entry[1]}\n")
+        f.write(f"{config.exit[0]},{config.exit[1]}\n")
+        f.write(shortest_path(maze, config.entry, config.exit))
+
+
     print_maze(maze, config.entry, config.exit,
                shortest_path(maze, config.entry, config.exit))
 

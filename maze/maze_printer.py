@@ -74,12 +74,12 @@ def print_maze(
 
             row_top += content
 
-            if cell & (1 << 2):
+            if cell & (1 << 1):
                 row_top += "|"
             else:
                 row_top += " "
 
-            if cell & (1 << 1):
+            if cell & (1 << 2):
                 row_bottom += "---+"
             else:
                 row_bottom += "   +"

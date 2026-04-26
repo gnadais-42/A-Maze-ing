@@ -52,7 +52,7 @@ def shortest_path(
             if not (0 <= nx < width and 0 <= ny < height):
                 continue
 
-            if grid[y][x] & (1 << 3 - d):
+            if grid[y][x] & (1 << d):
                 continue
 
             if (nx, ny) not in visited:
