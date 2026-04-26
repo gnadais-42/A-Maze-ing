@@ -9,7 +9,7 @@ def main() -> None:
 
     if config is None:
         print("=== Invalid configuration input ===")
-        return  # ou sera melhor sys.exit(1)?
+        sys.exit(1)
 
     generator: MazeGenerator = MazeGenerator(
         config.width,

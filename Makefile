@@ -7,20 +7,24 @@ VENV_PYTHON	= $(VENV)/bin/python
 $(VENV):
 	$(PYTHON) -m venv $(VENV)
 
-install: $(VENV)
+install: .install
+
+.install: $(VENV)
 	$(PIP) install -r requirements/requirements.txt
 	$(PIP) install requirements/mlx-2.2-py3-none-any.whl
+	touch .install
 
-run: $(VENV)
+run: $(VENV) install
 	$(VENV_PYTHON) $(MAIN)
 
-debug: $(VENV)
+debug: $(VENV) install
 	$(VENV_PYTHON) -m pdb $(MAIN)
 
 clean:
 	find . -type d -name "__pycache__" -exec rm -rf {} +
 	find . -type d -name ".mypy_cache" -exec rm -rf {} +
 	find . -type f -name "*.pyc" -delete
+	rm .install
 	rm -rf $(VENV)
 
 lint: $(VENV)
