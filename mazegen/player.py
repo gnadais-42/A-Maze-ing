@@ -34,8 +34,6 @@ class Player:
         nx = self.coords[0] + DIRS[d][0]
         ny = self.coords[1] + DIRS[d][1]
 
-        print(nx, ny)
-
         if (not self.maze._has_wall(self.coords[0], self.coords[1], d)
                 and self.maze._in_bounds(nx, ny)):
 
