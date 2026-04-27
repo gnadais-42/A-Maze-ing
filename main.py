@@ -5,7 +5,7 @@ import sys
 
 
 def main() -> None:
-    config: MazeConfiguration = parser("config.txt")
+    config: MazeConfiguration | None = parser("config.txt")
 
     if config is None:
         print("=== Invalid configuration input ===")

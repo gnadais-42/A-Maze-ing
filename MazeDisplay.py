@@ -1,7 +1,6 @@
 from mlx import Mlx
 from maze import MazeGenerator, MazeConfiguration, Player, shortest_path
 from maze import path_to_cells
-from parser import parser
 from typing import Tuple, Any
 from collections import deque
 import time
@@ -68,7 +67,7 @@ class MazeDisplay:
                                [0xFFFF8E0F, 0xFF7F0FFF, 0xFF00E5FF],
                                [0xFFFF0F97, 0xFF1814F5, 0xFF00E5FF],
                                [0xFF238F18, 0xFFCBFF30, 0xFF00E5FF]])
-        self.horses = deque()
+        self.horses: deque = deque()
         self.carrot = None
         self.stable = None
 
@@ -76,7 +75,7 @@ class MazeDisplay:
 
     def _generate_horses(self) -> deque:
         """Generates the images of the horse sprites from asset pngs"""
-        horses_img = deque()
+        horses_img: deque = deque()
         horses_png = [
             "sprites/horse-1.png",
             "sprites/horse-2.png",
@@ -98,7 +97,7 @@ class MazeDisplay:
         """Shuffles/rotates through the available colorsets"""
         self.colorsets.rotate(-1)
 
-    def mykey(self, keynum, stuff: Any) -> None:
+    def mykey(self, keynum: int, stuff: Any) -> None:
         """Detects various keyboard inputs
         and calls the relevant programs for each input"""
         _ = stuff
@@ -401,12 +400,3 @@ class MazeDisplay:
         print("destroy window1")
         self.mlx.mlx_destroy_window(self.mlx_ptr, self.win_ptr2)
         print("destroy window2")
-
-
-if __name__ == "__main__":
-
-    config_data = parser("config.txt")
-
-    dsp = MazeDisplay(config_data)
-
-    dsp.start_display()
