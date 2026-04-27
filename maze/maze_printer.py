@@ -69,7 +69,7 @@ def print_maze(
                 content = "###"
             else:
                 content = "   "
-            if (j, i) == player_coords:
+            if (j, i) == player_coords and player is not None:
                 content = f" {red if player.wrong_turn else yellow}P{reset} "
 
             row_top += content

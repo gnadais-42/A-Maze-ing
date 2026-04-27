@@ -14,24 +14,8 @@ class MazeConfiguration(BaseModel):
     seed: Optional[int] = None
     display_mode: Optional[str] = None
 
-    @model_validator(mode="before")
-    @classmethod
-    def parse_tuple_fields(cls, data):
-        def parse(coords):
-            if isinstance(coords, str):
-                return tuple(x for x in coords.split(","))
-            return coords
-
-        if isinstance(data, dict):
-            if "entry" in data:
-                data["entry"] = parse(data["entry"])
-            if "exit" in data:
-                data["exit"] = parse(data["exit"])
-
-        return data
-
     @model_validator(mode="after")
-    def valid_coords(self):
+    def valid_coords(self) -> "MazeConfiguration":
         if not ((0 <= self.entry[0] < self.width)
                 and (0 <= self.entry[1] < self.height)):
             raise ValueError("Entry point must be inside maze")
@@ -66,7 +50,7 @@ class MazeConfiguration(BaseModel):
         return False
 
     @model_validator(mode="after")
-    def valid_entry_exit(self):
+    def valid_entry_exit(self) -> "MazeConfiguration":
         if self.entry == self.exit:
             raise ValueError("Exit and Entry points must be different")
 

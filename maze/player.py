@@ -15,9 +15,13 @@ class Player:
     def __init__(self, generator: MazeGenerator,
                  coords: Tuple[int, int] | None = None) -> None:
 
-        self.start = coords
         self.maze = generator
-        self.coords = coords
+        if coords is None:
+            self.start = (0, 0)
+            self.coords = generator.entry
+        else:
+            self.coords = coords
+            self.start = coords
         self.path = ""
         self.path_cells = set([coords])
         self.wrong_turn = False
@@ -44,10 +48,10 @@ class Player:
         if self.coords == self.maze.exit:
             self.lock = True
 
-    def correct_turn(self):
+    def correct_turn(self) -> None:
         self.wrong_turn = False
 
-    def reset(self):
+    def reset(self) -> None:
         self.path = ""
         self.path_cells = set([self.start])
         self.wrong_turn = False

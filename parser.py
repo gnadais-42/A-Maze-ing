@@ -5,6 +5,22 @@ from maze import MazeGenerator, MazeConfiguration, print_maze
 from pydantic import ValidationError
 
 
+def require_env(name: str) -> str:
+    value = os.getenv(name)
+    if value is None:
+        raise ValueError(f"Missing environment variable: {name}")
+    return value
+
+
+def parse_tuple(value: str) -> tuple[int, int]:
+    x, y = value.split(",")
+    return int(x), int(y)
+
+
+def parse_bool(value: str) -> bool:
+    return value.lower() in {"1", "true"}
+
+
 def parser(config_file: str) -> Optional[MazeConfiguration]:
     """Function that reads the config file and turns it into variables
     usable by the maze generator"""
@@ -16,20 +32,24 @@ def parser(config_file: str) -> Optional[MazeConfiguration]:
 
     try:
         config = MazeConfiguration(
-            width=os.getenv("WIDTH"),
-            height=os.getenv("HEIGHT"),
-            entry=os.getenv("ENTRY"),
-            exit=os.getenv("EXIT"),
-            output_file=os.getenv("OUTPUT_FILE"),
-            perfect=os.getenv("PERFECT"),
+            width=int(require_env("WIDTH")),
+            height=int(require_env("HEIGHT")),
+            entry=parse_tuple(require_env("ENTRY")),
+            exit=parse_tuple(require_env("EXIT")),
+            output_file=require_env("OUTPUT_FILE"),
+            perfect=parse_bool(require_env("PERFECT")),
             algorithm=os.getenv("ALGORITHM"),
-            seed=os.getenv("SEED"),
+            seed=int(require_env("SEED")),
             display_mode=os.getenv("DISPLAY_MODE")
         )
     except ValidationError as e:
         for err in e.errors():
             print(err["msg"])
         return None
+    except (ValueError, TypeError) as e:
+        print(e)
+        return None
+
     return config
 
 

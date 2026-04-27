@@ -28,11 +28,11 @@ clean:
 	rm -rf $(VENV)
 
 lint: $(VENV)
-	$(VENV)/bin/flake8 .
+	$(VENV)/bin/flake8 . --exclude=$(VENV)
 	$(VENV)/bin/mypy . --warn-return-any --warn-unused-ignores --ignore-missing-imports --disallow-untyped-defs --check-untyped-defs
 
 lint-strict: $(VENV)
-	$(VENV)/bin/flake8 .
+	$(VENV)/bin/flake8 . --exclude=$(VENV)
 	$(VENV)/bin/mypy . --strict
 	
 .PHONY: install run debug clean lint lint-strict

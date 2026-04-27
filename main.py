@@ -32,7 +32,6 @@ def main() -> None:
         f.write(f"{config.exit[0]},{config.exit[1]}\n")
         f.write(shortest_path(maze, config.entry, config.exit))
 
-
     print_maze(maze, config.entry, config.exit,
                shortest_path(maze, config.entry, config.exit))
 

@@ -19,8 +19,7 @@ class MazeGenerator:
         self.grid = [[0b1111 for _ in range(width)] for _ in range(height)]
         self.blocked = [[False for _ in range(width)] for _ in range(height)]
 
-        self.grid_list = []
-        self.cells_generated = []
+        self.cells_generated: List[Tuple[int, int]] = []
 
     def generate(self, perfect: bool = True) -> List[List[int]]:
         """This function calls the generator functions for the perfect
@@ -90,7 +89,6 @@ class MazeGenerator:
                 self._remove_wall(nx, ny, OPPOSITE[d])
                 visited[ny][nx] = True
                 stack.append((nx, ny))
-                self.grid_list.append([row.copy() for row in self.grid])
                 self.cells_generated.append((nx, ny))
             else:
                 stack.pop()
