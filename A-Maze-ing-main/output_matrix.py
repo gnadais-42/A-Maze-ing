@@ -8,7 +8,7 @@ def output(output_file: str, maze: List[List[int]], path: str,
         for line in maze:
             for digit in line:
                 if digit > 9:
-                    f.write(chr(ord('A') + digit - 9))
+                    f.write(chr(ord('A') + digit - 10))
                 else:
                     f.write(f"{digit}")
             f.write("\n")

@@ -1,7 +1,7 @@
 from mlx import Mlx
 from mazegen import MazeGenerator, MazeConfiguration, Player, shortest_path
 from mazegen import path_to_cells
-from typing import Tuple, Any
+from typing import Tuple, Any, List
 from collections import deque
 import time
 
@@ -306,7 +306,7 @@ class MazeDisplay:
                                          self.player.coords[0] * 20,
                                          self.player.coords[1] * 20)
 
-    def start_display(self) -> None:
+    def start_display(self) -> List[List[int]]:
         """Initializes the graphical display.
         Responsible for introducing the instruction strings,
         the exit/entry sprites, and setting up all the hooks
@@ -351,8 +351,7 @@ class MazeDisplay:
         self.mlx.mlx_loop_hook(self.mlx_ptr, self.animated_generation, None)
         self.mlx.mlx_loop(self.mlx_ptr)
         self.mlx.mlx_destroy_image(self.mlx_ptr, self.img_ptr.img)
-        print("destroy image")
         self.mlx.mlx_destroy_window(self.mlx_ptr, self.win_ptr1)
-        print("destroy window1")
         self.mlx.mlx_destroy_window(self.mlx_ptr, self.win_ptr2)
-        print("destroy window2")
+
+        return self.generator.grid

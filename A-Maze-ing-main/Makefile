@@ -15,7 +15,7 @@ install: .install
 	touch .install
 
 run: $(VENV) install
-	$(VENV_PYTHON) $(MAIN)
+	$(VENV_PYTHON) $(MAIN) config.txt
 
 debug: $(VENV) install
 	$(VENV_PYTHON) -m pdb $(MAIN)
@@ -24,8 +24,8 @@ clean:
 	find . -type d -name "__pycache__" -exec rm -rf {} +
 	find . -type d -name ".mypy_cache" -exec rm -rf {} +
 	find . -type f -name "*.pyc" -delete
-	rm .install
 	rm -rf $(VENV)
+	rm .install
 
 lint: $(VENV) install
 	$(VENV)/bin/flake8 . --exclude=$(VENV)
