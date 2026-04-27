@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "mazegen"
+version = "0.1.0"
+description = "Maze generating module"
+readme = "mazegen/README.md"
+authors = [
+  "pcoelho- <pcoelho-@student.42porto.com>",
+  "gnadais- <gnadais-@student.42porto.com>"
+]
+
+[tool.poetry.dependencies]
+python = ">=3.10"
+pydantic = "2.13.1"
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["mazegen", "mazegen.*"]
