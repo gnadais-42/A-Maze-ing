@@ -101,8 +101,36 @@ class MazeGenerator:
         thus adding at least one other path from point a to point b"""
         if attempts is None:
             attempts = (self.width * self.height) // 10
+        if attempts <= 1:
+            attempts = 2
+        attempts_copy = attempts
+        x, y = self.entry # Attempting to break walls around entry
+        dirs = list(range(4))
+        self.random.shuffle(dirs)
+        for d in dirs:
+                nx, ny = x + DIRS[d][0], y + DIRS[d][1]
 
-        for _ in range(attempts):
+                if self._in_bounds(nx, ny) and not self.blocked[ny][nx]:
+                    if self._has_wall(x, y, d):
+                        self._remove_wall(x, y, d)
+                        self._remove_wall(nx, ny, OPPOSITE[d])
+                        attempts -= 1
+                        break
+        if attempts_copy == attempts:
+            x, y = self.exit # Attempting to break walls around exit
+            dirs = list(range(4))
+            self.random.shuffle(dirs)
+            for d in dirs:
+                    nx, ny = x + DIRS[d][0], y + DIRS[d][1]
+
+                    if self._in_bounds(nx, ny) and not self.blocked[ny][nx]:
+                        if self._has_wall(x, y, d):
+                            self._remove_wall(x, y, d)
+                            self._remove_wall(nx, ny, OPPOSITE[d])
+                            attempts -= 1
+                            break
+
+        while attempts > 0:
             x, y = self._random_unblocked_cell()
 
             dirs = list(range(4))
@@ -115,6 +143,7 @@ class MazeGenerator:
                     if self._has_wall(x, y, d):
                         self._remove_wall(x, y, d)
                         self._remove_wall(nx, ny, OPPOSITE[d])
+                        attempts -= 1
                         break
 
     def _place_42_center(self) -> None:
