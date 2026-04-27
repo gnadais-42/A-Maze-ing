@@ -1,4 +1,4 @@
-from mazegen import MazeGenerator, MazeConfiguration, print_maze, shortest_path
+from mazegen import MazeConfiguration, shortest_path
 from parser import parser
 from MazeDisplay import MazeDisplay
 from output_matrix import output
