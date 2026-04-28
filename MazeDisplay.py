@@ -1,14 +1,25 @@
 from mlx import Mlx
-from mazegen import MazeGenerator, Player, shortest_path
+from mazegen import MazeGenerator, MazeConfiguration, Player, shortest_path
 from mazegen import path_to_cells
-from MazeConfiguration import MazeConfiguration
 from typing import Tuple, Any, List
 from collections import deque
 import time
 
 
 class ImgData:
-    """Structure for image data"""
+    """
+    Structure for image data
+    
+    Attributes:
+    
+    img: (Any) - image pointer
+    width: (int) - image width
+    height: (int) - image height
+    data: List[int] - image buffer
+    bpp: (int) - bytes per pixel
+    sl: (int) - bytes per pixel line 
+    
+    """
     def __init__(self, img: Any, width: int,
                  height: int, mlx: Mlx) -> None:
 
@@ -26,7 +37,28 @@ class MazeDisplay:
     All it needs are valid configs for the maze.
 
     The size of the second window, colorsets and most other static variables
-    are attributes of this class."""
+    are attributes of this class.
+    
+    Attributes:
+
+    configs: (MazeConfiguration) - object with info about the maze structure
+    generator: (MazeGenerator) - generator object that creates new mazes
+    player: (Player) - player object
+    path_shown: (bool) - whether the shortest path is hidden or shown
+    mlx: (Mlx) - Mlx instance, used to call mlx methods
+    maze: (List[List[int]]) - grid list that represents the maze tiles
+    path: (List[Tuple(int, int)]) - Ordered list of shotest path tiles
+    mlx_ptr: (Any) - pointer to the overall mlx display
+    win_ptr1: (Any) - pointer to the first display window
+    win_ptr2: (Any) - pointer to the second display window
+    img_ptr: (ImgData) - pointer to the maze image object
+    colorsets: (deque(list[bytes])) - color set deck
+    horses: (deque(Any)) - deck of horse images
+    carrot (Any) - carrot/exit image
+    stable (Any) - stable/entry image
+    anim_step (int) - current step of gthe generation animation 
+    """
+    
     def __init__(self, configs: MazeConfiguration) -> None:
         self.configs = configs
         self.generator = MazeGenerator(width=configs.width,
@@ -41,7 +73,6 @@ class MazeDisplay:
         pathstr = shortest_path(self.maze, entry=configs.entry,
                                 exit=configs.exit)
         self.path = path_to_cells(configs.entry, pathstr)
-        self.configs = configs
         self.mlx_ptr = self.mlx.mlx_init()
         self.win_ptr1 = self.mlx.mlx_new_window(self.mlx_ptr,
                                                 configs.width*20,
@@ -148,7 +179,7 @@ class MazeDisplay:
         self.mlx.mlx_loop_exit(self.mlx_ptr)
 
     def gere_close2(self, stuff: Any) -> None:
-        """Coses the second window"""
+        """Closes the second window"""
         _ = stuff
         self.mlx.mlx_destroy_window(self.mlx_ptr, self.win_ptr2)
 
