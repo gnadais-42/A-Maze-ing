@@ -27,7 +27,7 @@ class MazeConfiguration(BaseModel):
         return self
 
     def is_inside_42(self, x: int, y: int) -> bool:
-        if self.height < 6 or self.width < 7:
+        if self.height < 7 or self.width < 8:
             return False
 
         pattern = [

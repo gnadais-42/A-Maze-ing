@@ -7,9 +7,30 @@ OPPOSITE = {0: 2, 1: 3, 2: 0, 3: 1}
 
 
 class MazeGenerator:
-    """Maze Generator class"""
+    """
+    Maze Generator Class
+    """
     def __init__(self, width: int, height: int, entry: Tuple[int, int],
                  exit: Tuple[int, int], seed: int | None = None):
+        """
+        Reusable generator able to make both perfect and imperfect mazes
+
+        Attributes:
+
+        width: (int) Determines the width of the maze
+        height: (int) Determines the height of the maze
+        entry: (tuple[int, int]) Starting point of the maze
+        exit: (tuple[int, int]) End point of the maze
+        random: (int | None) Controls the random aspect of
+        the maze generation
+        grid: (list[list[int]]) The actual maze structure
+        as a matrix of ints
+        blocked: (list[list[bool]]) Matrix of bools responsible
+        for the 42 pattern
+        cells_generated: (list[tuple[int,int]]) list containing the order
+        in which the maze cells were generated
+        """
+
         self.width = width
         self.height = height
         self.entry = entry
@@ -21,11 +42,12 @@ class MazeGenerator:
 
         self.cells_generated: List[Tuple[int, int]] = []
 
+        self._place_42_center()
+
     def generate(self, perfect: bool = True) -> List[List[int]]:
         """This function calls the generator functions for the perfect
-        maze and then , if needed, tweaks it to create an imperfect maze
+        maze and then ,if needed, tweaks it to create an imperfect maze
         """
-        self._place_42_center()
         self._generate_perfect()
 
         if not perfect:
@@ -34,30 +56,9 @@ class MazeGenerator:
         return self.grid
 
     def _generate_perfect(self) -> None:
-        """generates a Perfect Maze - one where any two points only have
-        a single path between them, and every point is accessible
-
-        This was achieved through the implementation of an iterative DFS
-        (Depth-first search) starting at a random cell that does not
-        belong to the 42 pattern in the middle of the maze (if it is big
-        enough to have one)
-
-        This maze is a tree in graph theory.
-        Which is a graph where there is no cycle
-        (which means there is only one path between point a and b).
-
-        visited -> Matrix of booleans that tells us which cells
-        have or haven't been visited
-
-        stack -> List of cells that allows for the DFS,
-        everytime you go to a cell you choose a
-        direction to continue and if the cell in that direction
-        has not yet been visited then it does not break the "perfectness"
-        of the maze
-
-        neighbors -> List of tuples containing the coordinates
-        of a neighbor cell of the cell we're seeing in stack
-        and also the direction which it came from"""
+        """
+        Generates a Perfect Maze through a DFS implementation
+        """
 
         row = [0b1111 for _ in range(self.width)]
         self.grid = [row[:] for _ in range(self.height)]
@@ -94,11 +95,9 @@ class MazeGenerator:
                 stack.pop()
 
     def _add_cycles(self, attempts: int | None = None) -> None:
-        """Adds cycles in order to generate a false (non-perfect) Maze
-        This works by just randomly removing walls. Since the perfect maze
-        is a tree in graph theory, any wall removed will automatically add
-        a cycle to the maze,
-        thus adding at least one other path from point a to point b"""
+        """
+        Adds cycles in order to generate a false (non-perfect) Maze
+        """
         if attempts is None:
             attempts = (self.width * self.height) // 10
 
@@ -122,6 +121,7 @@ class MazeGenerator:
         if the size allows it"""
 
         if self.height < 7 or self.width < 8:
+            print("Maze Too small for 42 pattern")
             return
 
         pattern = [

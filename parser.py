@@ -7,6 +7,9 @@ from pydantic import ValidationError
 
 
 def require_env(name: str) -> str:
+    """
+    Checks if variables exist in the env
+    """
     value = os.getenv(name)
     if value is None:
         raise ValueError(f"Missing environment variable: {name}")
@@ -14,11 +17,13 @@ def require_env(name: str) -> str:
 
 
 def parse_tuple(value: str) -> tuple[int, int]:
+    """Unravels coordinate tuples"""
     x, y = value.split(",")
     return int(x), int(y)
 
 
 def parse_bool(value: str) -> bool:
+    """parses 'perfect' bool value"""
     return value.lower() in {"1", "true"}
 
 
@@ -32,6 +37,11 @@ def parser(config_file: str) -> Optional[MazeConfiguration]:
         return None
 
     try:
+        seed = int(os.getenv("SEED"))
+    except (ValueError, TypeError):
+        seed = None
+
+    try:
         config = MazeConfiguration(
             width=int(require_env("WIDTH")),
             height=int(require_env("HEIGHT")),
@@ -40,7 +50,7 @@ def parser(config_file: str) -> Optional[MazeConfiguration]:
             output_file=require_env("OUTPUT_FILE"),
             perfect=parse_bool(require_env("PERFECT")),
             algorithm=os.getenv("ALGORITHM"),
-            seed=int(require_env("SEED")),
+            seed=seed,
             display_mode=os.getenv("DISPLAY_MODE")
         )
     except ValidationError as e:
@@ -55,6 +65,7 @@ def parser(config_file: str) -> Optional[MazeConfiguration]:
 
 
 def print_config(config: MazeConfiguration) -> None:
+    """prints configs attributes. Used in debugging"""
     for name, value in config:
         print(f"{name}: {value}")
 
