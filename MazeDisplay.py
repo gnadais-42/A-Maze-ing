@@ -1,27 +1,28 @@
 from mlx import Mlx
-from mazegen import MazeGenerator, MazeConfiguration, Player, shortest_path
+from mazegen import MazeGenerator, Player, shortest_path
 from mazegen import path_to_cells
+from MazeConfiguration import MazeConfiguration
 from typing import Tuple, Any, List
 from collections import deque
 import time
 
 
 class ImgData:
-    """
-    Structure for image data
-    
-    Attributes:
-    
-    img: (Any) - image pointer
-    width: (int) - image width
-    height: (int) - image height
-    data: List[int] - image buffer
-    bpp: (int) - bytes per pixel
-    sl: (int) - bytes per pixel line 
-    
-    """
+
     def __init__(self, img: Any, width: int,
                  height: int, mlx: Mlx) -> None:
+        """
+        Structure for image data
+
+        Attributes:
+
+        img: (Any) - image pointer
+        width: (int) - image width
+        height: (int) - image height
+        data: List[int] - image buffer
+        bpp: (int) - bytes per pixel
+        sl: (int) - bytes per pixel line
+        """
 
         self.img = img
         self.width = width
@@ -31,35 +32,38 @@ class ImgData:
 
 
 class MazeDisplay:
-    """Structure for displaying the Maze graphically. Uses minilibx.
-    Everything from the initial maze gen to opening the windows and calculating
-    the shortest path, or getting screen dimensions is done at initialization.
-    All it needs are valid configs for the maze.
 
-    The size of the second window, colorsets and most other static variables
-    are attributes of this class.
-    
-    Attributes:
-
-    configs: (MazeConfiguration) - object with info about the maze structure
-    generator: (MazeGenerator) - generator object that creates new mazes
-    player: (Player) - player object
-    path_shown: (bool) - whether the shortest path is hidden or shown
-    mlx: (Mlx) - Mlx instance, used to call mlx methods
-    maze: (List[List[int]]) - grid list that represents the maze tiles
-    path: (List[Tuple(int, int)]) - Ordered list of shotest path tiles
-    mlx_ptr: (Any) - pointer to the overall mlx display
-    win_ptr1: (Any) - pointer to the first display window
-    win_ptr2: (Any) - pointer to the second display window
-    img_ptr: (ImgData) - pointer to the maze image object
-    colorsets: (deque(list[bytes])) - color set deck
-    horses: (deque(Any)) - deck of horse images
-    carrot (Any) - carrot/exit image
-    stable (Any) - stable/entry image
-    anim_step (int) - current step of gthe generation animation 
-    """
-    
     def __init__(self, configs: MazeConfiguration) -> None:
+        """Structure for displaying the Maze graphically. Uses minilibx.
+        Everything from the initial maze gen to opening the windows and
+        calculating the shortest path, or getting screen dimensions is
+        done at initialization.
+        All it needs are valid configs for the maze.
+
+        The size of the second window, colorsets and most other static
+        variables are attributes of this class.
+
+        Attributes:
+
+        configs: (MazeConfiguration) - object with all info
+        about the maze structure
+
+        generator: (MazeGenerator) - generator object that creates new mazes
+        player: (Player) - player object
+        path_shown: (bool) - whether the shortest path is hidden or shown
+        mlx: (Mlx) - Mlx instance, used to call mlx methods
+        maze: (List[List[int]]) - grid list that represents the maze tiles
+        path: (List[Tuple(int, int)]) - Ordered list of shotest path tiles
+        mlx_ptr: (Any) - pointer to the overall mlx display
+        win_ptr1: (Any) - pointer to the first display window
+        win_ptr2: (Any) - pointer to the second display window
+        img_ptr: (ImgData) - pointer to the maze image object
+        colorsets: (deque(list[bytes])) - color set deck
+        horses: (deque(Any)) - deck of horse images
+        carrot (Any) - carrot/exit image
+        stable (Any) - stable/entry image
+        anim_step (int) - current step of gthe generation animation
+        """
         self.configs = configs
         self.generator = MazeGenerator(width=configs.width,
                                        height=configs.height,
