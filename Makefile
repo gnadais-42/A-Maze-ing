@@ -1,8 +1,8 @@
 PYTHON		= python3
-MAIN		= main.py
+MAIN		= a_maze_ing.py
 VENV		= venv
 PIP		= $(VENV)/bin/pip
-VENV_PYTHON	= $(VENV)/bin/python
+VENV_PYTHON	= $(VENV)/bin/python3
 
 $(VENV):
 	$(PYTHON) -m venv $(VENV)
@@ -18,14 +18,22 @@ run: $(VENV) install
 	$(VENV_PYTHON) $(MAIN) config.txt
 
 debug: $(VENV) install
-	$(VENV_PYTHON) -m pdb $(MAIN)
+	$(VENV_PYTHON) -m pdb $(MAIN) config.txt
 
 clean:
 	find . -type d -name "__pycache__" -exec rm -rf {} +
 	find . -type d -name ".mypy_cache" -exec rm -rf {} +
 	find . -type f -name "*.pyc" -delete
 	rm -rf $(VENV)
-	rm .install
+	rm -f .install
+
+fclean: clean
+	rm -rf dist
+	rm -rf mazegen*egg*
+
+build: $(VENV)
+	$(PIP) install --quiet --upgrade build
+	$(VENV_PYTHON) -m build
 
 lint: $(VENV) install
 	$(VENV)/bin/flake8 . --exclude=$(VENV)

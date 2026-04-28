@@ -1,4 +1,5 @@
-from mazegen import MazeConfiguration, shortest_path
+from mazegen import shortest_path
+from MazeConfiguration import MazeConfiguration
 from parser import parser
 from MazeDisplay import MazeDisplay
 from output_matrix import output
@@ -26,7 +27,8 @@ def main() -> None:
         maze,
         shortest_path(maze, config.entry, config.exit),
         config.entry,
-        config.exit)
+        config.exit
+        )
 
 
 if __name__ == "__main__":

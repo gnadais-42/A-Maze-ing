@@ -1,7 +1,8 @@
 from dotenv import load_dotenv
 import os
 from typing import Optional
-from mazegen import MazeGenerator, MazeConfiguration, print_maze
+from mazegen import MazeGenerator, print_maze
+from MazeConfiguration import MazeConfiguration
 from pydantic import ValidationError
 
 

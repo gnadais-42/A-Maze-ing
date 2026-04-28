@@ -1,6 +1,7 @@
 from mlx import Mlx
-from mazegen import MazeGenerator, MazeConfiguration, Player, shortest_path
+from mazegen import MazeGenerator, Player, shortest_path
 from mazegen import path_to_cells
+from MazeConfiguration import MazeConfiguration
 from typing import Tuple, Any, List
 from collections import deque
 import time
