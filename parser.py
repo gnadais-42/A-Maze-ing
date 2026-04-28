@@ -36,10 +36,15 @@ def parser(config_file: str) -> Optional[MazeConfiguration]:
     except (FileNotFoundError, PermissionError):
         return None
 
-    try:
-        seed = int(os.getenv("SEED"))
-    except (ValueError, TypeError):
+    seed_str = os.getenv("SEED")
+
+    if seed_str is None:
         seed = None
+    else:
+        try:
+            seed = int(seed_str)
+        except ValueError:
+            seed = None
 
     try:
         config = MazeConfiguration(
