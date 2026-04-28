@@ -1,0 +1,13 @@
+# Python generated files
+__pycache__/
+dist/
+*.egg-info
+*.py[oc]
+*.egg-info*
+
+# Virtual Environment
+venv/
+
+# Others
+.mypy_cache
+.install
