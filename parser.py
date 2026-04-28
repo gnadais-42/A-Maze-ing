@@ -7,6 +7,9 @@ from pydantic import ValidationError
 
 
 def require_env(name: str) -> str:
+    """
+    Checks if variables exist in the env
+    """
     value = os.getenv(name)
     if value is None:
         raise ValueError(f"Missing environment variable: {name}")
@@ -14,11 +17,13 @@ def require_env(name: str) -> str:
 
 
 def parse_tuple(value: str) -> tuple[int, int]:
+    """Unravels coordinate tuples"""
     x, y = value.split(",")
     return int(x), int(y)
 
 
 def parse_bool(value: str) -> bool:
+    """parses 'perfect' bool value"""
     return value.lower() in {"1", "true"}
 
 
@@ -55,6 +60,7 @@ def parser(config_file: str) -> Optional[MazeConfiguration]:
 
 
 def print_config(config: MazeConfiguration) -> None:
+    """prints configs attributes. Used in debugging"""
     for name, value in config:
         print(f"{name}: {value}")
 
